@@ -53,7 +53,7 @@
 
 <div class="container mt-5 d-flex flex-column align-items-center justify-content-center">
 	{#if sucessMessage}
-	<div class="container my-3 alert alert-danger" role="alert">
+	<div class="container my-3 alert alert-success" role="alert">
 		{sucessMessage}
 	</div>
 {/if}
