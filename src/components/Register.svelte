@@ -11,7 +11,6 @@
     const onSubmit = () => {
         error=""
       registerUser({email, password, name}).then((result)=>{
-        console.log(result);
         setUserLogined(result);
         goto('/',{replaceState: true});
         }).catch((err)=>{

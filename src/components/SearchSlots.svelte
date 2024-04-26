@@ -1,7 +1,6 @@
 <script>
-	import { findFreeSlots } from '../service/slotService.js';
+	import { getFreeSlots } from '../store/slotStore.js';
 	import moment from 'moment';
-	import { slots } from '../store/slotStore.js';
  	import Booking from './Booking.svelte';
 
 	let vehicleType = '';
@@ -18,11 +17,12 @@
 
 	const searchSlots = () => {
 		error = '';
+		slot = null;
 		if (!vehicleType || !startDate || !endDate) {
 			error = 'Please select vehicle type, start date and end date';
 			return;
 		}
-		const freeSlot = findFreeSlots($slots, vehicleType, startDate, endDate);
+		const freeSlot = getFreeSlots(vehicleType, startDate, endDate);
 		if (freeSlot) {
 			slot = freeSlot;
 		} else {

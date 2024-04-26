@@ -11,15 +11,16 @@ export const existingSlots =
 
 export const slots = writable(existingSlots);
 
-export const getSlots = () => {
-	let slotValue = {};
+export const getcurrentState = () => {
+	let currentState = {};
 	const unsubscribe = slots.subscribe((value) => {
-		slotValue = value;
+		currentState = value;
 	});
 	unsubscribe();
-	return slotValue;
+	return currentState;
 };
-export const setBookingSlots = (
+
+export const bookingConfirmation = (
 	{ startDate, endDate, vehicleNumber, userEmail, slotId },
 	callback
 ) => {
@@ -36,11 +37,13 @@ export const setBookingSlots = (
 			amountPaid,
 			status: 'upcoming'
 		};
-		const slotsValue = getSlots();
+// save new booking
+		const slotsValue = getcurrentState();
 		const findSlot = slotsValue.find((slot) => slot.id === slotId);
 		if (findSlot) {
 			findSlot.bookings.push(newBooking);
 		}
+
 		localStorage.setItem('slots', JSON.stringify(slotsValue));
 		slots.set(slotsValue);
 		callback(null, newBooking);
@@ -49,9 +52,36 @@ export const setBookingSlots = (
 	}
 };
 
-export const findBookingSlot = (vehicleNumber) => {
+export const getFreeSlots = ( type, fromDate, toDate)  => {
+	const slotsValue = getcurrentState();
+    const filteredSlots = slotsValue.filter(slot => slot.type === type);
+    for (const slot of filteredSlots) {
+        // Check each booking
+        let isFree = true;
+        for (const booking of slot.bookings) {
+            const bookingFromDate = moment(booking.fromDate);
+            const bookingToDate = moment(booking.toDate);
+            const queryFromDate = moment(fromDate);
+            const queryToDate = moment(toDate);
+
+            if (queryFromDate.isBefore(bookingToDate) && queryToDate.isAfter(bookingFromDate)) {
+                isFree = false;
+                break; 
+            }
+        }
+
+        // If no booking overlaps with the queried time period, return the slot
+        if (isFree) {
+            return slot;
+        }
+    }
+    return null;
+}
+
+
+export const findBookedSlot = (vehicleNumber) => {
 	const currentDate = moment();
-	const slotsValue = getSlots();
+	const slotsValue = getcurrentState();
 	let currentData = null;
 	for (const slot of slotsValue) {
 		const booking = slot.bookings;
@@ -73,9 +103,9 @@ export const findBookingSlot = (vehicleNumber) => {
 	return currentData;
 };
 
-export const findBookingForCheckout = (vehicleNumber) => {
+export const getCheckedInDetails = (vehicleNumber) => {
 	const currentDate = moment();
-	const slotValue = getSlots();
+	const slotValue = getcurrentState();
 	let currentData = null;
 	for (const slot of slotValue) {
 		if (slot?.bookingDetails?.vehicleNumber === vehicleNumber) {
@@ -106,9 +136,10 @@ export const findBookingForCheckout = (vehicleNumber) => {
 	return currentData;
 };
 
-export const setCheckInSlot = (vehicleNumber, callback) => {
+export const confirmCheckIn = (vehicleNumber, callback) => {
 	const currentDate = moment();
-	const slotsValue = getSlots();
+	const slotsValue = getcurrentState();
+	console.log(slotsValue)
 	let currentSlot = null;
 	let currentData = null;
 	for (const slot of slotsValue) {
@@ -143,9 +174,9 @@ export const setCheckInSlot = (vehicleNumber, callback) => {
 	callback(null, currentData);
 };
 
-export const setCheckout = (slotId, callback = () => {}) => {
+export const confirmCheckout = (slotId, callback = () => {}) => {
 	const currentDate = moment();
-	const slotValue = getSlots();
+	const slotValue = getcurrentState();
     //find current slot
 	const currentSlot = slotValue.find((i) => i.id === slotId);
     //keep booking id

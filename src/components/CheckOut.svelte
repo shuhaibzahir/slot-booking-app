@@ -1,5 +1,5 @@
 <script>
-	import { findBookingForCheckout, setCheckout } from './../store/slotStore.js';
+	import { getCheckedInDetails, confirmCheckout } from './../store/slotStore.js';
 
 	let vehicleNumber = '';
 	let error = '';
@@ -10,7 +10,7 @@
 	$: searchOrClearButton = booking ? 'Clear' : 'Search';
 
 	const confirmBooking = () => {
-		setCheckout(booking?.id, (err, result) => {
+		confirmCheckout(booking?.id, (err, result) => {
 			if (err) {
 				error = err;
 			} else {
@@ -20,12 +20,12 @@
 		});
 	};
 
-	const findBooking = () => {
+	const findDetails = () => {
 		if (!vehicleNumber) {
 			error = 'Please enter vehicle number';
 			return;
 		}
-		const isBookingExist = findBookingForCheckout(vehicleNumber);
+		const isBookingExist = getCheckedInDetails(vehicleNumber);
 		if (isBookingExist) {
 			booking = isBookingExist;
 		} else {
@@ -84,7 +84,7 @@
 					</div>
 
 					<button
-						on:click={booking ? clearAllValue : findBooking}
+						on:click={booking ? clearAllValue : findDetails}
 						class={`mt-3 btn btn-${searchOrClearButtonColor} btn-block`}
 						>{searchOrClearButton}</button
 					>

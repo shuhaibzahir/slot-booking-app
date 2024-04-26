@@ -1,6 +1,6 @@
 <script>
 	import { Modal } from '@sveltestrap/sveltestrap';
-	import { setBookingSlots } from '../store/slotStore';
+	import { bookingConfirmation } from '../store/slotStore';
 	import { user } from '../store/userStore';
 
 	export let open = false;
@@ -23,7 +23,7 @@
 			userEmail: $user.email
 		};
 
-		setBookingSlots(data, (err, result) => {
+		bookingConfirmation(data, (err, result) => {
 			if (err) {
 				error = err;
 			} else {
