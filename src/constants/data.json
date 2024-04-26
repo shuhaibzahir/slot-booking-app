@@ -1,0 +1,28 @@
+[
+    {
+      "id": "slot1",
+      "type": "fourwheeler",
+      "bookings": []
+    },
+    {
+      "id": "slot2",
+      "type": "twowheeler",
+      "bookings": []
+    },
+    {
+      "id": "slot3",
+      "type": "fourwheeler",
+      "bookings": []
+    },
+    {
+      "id": "slot4",
+      "type": "twowheeler",
+      "bookings": []
+    },
+    {
+      "id": "slot5",
+      "type": "fourwheeler",
+      "bookings": []
+    }
+  ]
+  
