@@ -1,6 +1,7 @@
 <script>
 	import { findBookedSlot } from './../store/slotStore.js';
 	import {  confirmCheckIn } from "../store/slotStore";
+	import BookingDetails from './BookingDetails.svelte';
 
     let vehicleNumber = "";
     let error = "";
@@ -17,7 +18,7 @@
                error=err
             }else{
                 clearAllValue();
-                sucessMessage = "Check in successfully"
+                sucessMessage = "Check in successfully completed"
                 setTimeout(()=>{
                     sucessMessage = ""
                 },5000);
@@ -27,6 +28,8 @@
     }
 
     const findBooking = () => {
+        sucessMessage="";
+        error="";
         if(!vehicleNumber){
             error = "Please enter vehicle number"
             return
@@ -66,21 +69,16 @@
             <h3 class="text-center">Hi, Please enter the vehicle number</h3>
           </div>
           <div class="card-body">
-               {#if booking}
-               <div>
-                <p>{booking.startDate}</p>
-                <p>{booking.endDate}</p>
-                <p>{booking.amountPaid}</p>
-                <p>{booking.status}</p>
-                <p>{booking.vehicleNumber}</p>
+            <BookingDetails {booking} />
+            {#if !booking}
+            <div class="form-group">
+              <input bind:value={vehicleNumber}  type="text" class="form-control" id="vehicleNumber" placeholder="Enter vechicle number">
             </div>
-               {/if}
-              <div class="form-group">
-                <input bind:value={vehicleNumber}  type="text" class="form-control" id="vehicleNumber" placeholder="Enter vechicle number">
-              </div>
+					{/if}
+              
              
               
-              <button  on:click={booking ? clearAllValue : findBooking} class={`mt-3 btn btn-${searchOrClearButtonColor} btn-block`}>{searchOrClearButton}</button>
+              <button  disabled={!vehicleNumber}   on:click={booking ? clearAllValue : findBooking} class={`mt-3 btn btn-${searchOrClearButtonColor} btn-block`}>{searchOrClearButton}</button>
               {#if booking}
               <button  on:click={onConfirm} class="mt-3 btn btn-primary btn-block">Confirm</button>
               {/if}

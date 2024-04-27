@@ -58,6 +58,7 @@ export const getFreeSlots = ( type, fromDate, toDate)  => {
     for (const slot of filteredSlots) {
         // Check each booking
         let isFree = true;
+		//TODO if the slot has booking details and the fromDate is between the booking fromDate and toDate, then the slot is not free 
         for (const booking of slot.bookings) {
             const bookingFromDate = moment(booking.fromDate);
             const bookingToDate = moment(booking.toDate);
@@ -120,16 +121,15 @@ export const getCheckedInDetails = (vehicleNumber) => {
 		}
 	}
 	if (currentData) {
-		currentData.Totalamount = currentData.amountPaid;
+		currentData.totalAmount = currentData.amountPaid;
 		currentData.balanceAmount = 0;
-		if (currentDate > moment(currentData.bookingDetails?.endDate)) {
-			const durationInMinutes = moment(currentDate).diff(
-				moment(currentData.bookingDetails?.endDate),
-				'minutes'
-			);
+		const endDate = moment(currentData?.endDate)
+		if (currentDate.isAfter(endDate)) {
+			console.log("hitted")
+			const durationInMinutes = moment(currentDate).diff(endDate,'minutes');
 			const amountPerMinute = 1;
 			currentData.balanceAmount = durationInMinutes * amountPerMinute;
-			currentData.Totalamount = currentData.balanceAmount + currentData.bookingDetails.amountPaid;
+			currentData.totalAmount = currentData.balanceAmount + currentData.amountPaid;
 		}
 	}
 
@@ -139,7 +139,6 @@ export const getCheckedInDetails = (vehicleNumber) => {
 export const confirmCheckIn = (vehicleNumber, callback) => {
 	const currentDate = moment();
 	const slotsValue = getcurrentState();
-	console.log(slotsValue)
 	let currentSlot = null;
 	let currentData = null;
 	for (const slot of slotsValue) {

@@ -43,7 +43,7 @@
 	};
 
 	const setSucessMessage = ()=>{
-		sucessMessage = 'Booking successfully';
+		sucessMessage = 'Booking successfully completed';
 		setTimeout(() => {
 			sucessMessage = '';
 		}, 5000);

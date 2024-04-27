@@ -1,5 +1,6 @@
 <script>
 	import { getCheckedInDetails, confirmCheckout } from './../store/slotStore.js';
+	import BookingDetails from './BookingDetails.svelte';
 
 	let vehicleNumber = '';
 	let error = '';
@@ -21,6 +22,8 @@
 	};
 
 	const findDetails = () => {
+		sucessMessage="";
+		error="";
 		if (!vehicleNumber) {
 			error = 'Please enter vehicle number';
 			return;
@@ -39,7 +42,7 @@
 	};
 
 	const setSucessMessage = () => {
-		sucessMessage = 'Check-out successfully';
+		sucessMessage = 'Check-out successfully completed';
 		setTimeout(() => {
 			sucessMessage = '';
 		}, 5000);
@@ -64,15 +67,8 @@
 					<h3 class="text-center">Hi, Check-out here</h3>
 				</div>
 				<div class="card-body">
-					{#if booking}
-						<div>
-							<p>{booking.startDate}</p>
-							<p>{booking.endDate}</p>
-							<p>{booking.amountPaid}</p>
-							<p>{booking.status}</p>
-							<p>{booking.vehicleNumber}</p>
-						</div>
-					{/if}
+					<BookingDetails {booking} />
+					{#if !booking}
 					<div class="form-group">
 						<input
 							bind:value={vehicleNumber}
@@ -82,6 +78,7 @@
 							placeholder="Enter vechicle number"
 						/>
 					</div>
+					{/if}
 
 					<button
 						on:click={booking ? clearAllValue : findDetails}

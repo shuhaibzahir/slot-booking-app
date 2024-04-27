@@ -39,10 +39,11 @@
 
 <div>
 	<Modal body header="Booking your slot..." isOpen={open} {toggle}>
-		<form on:submit|preventDefault={onSubmit}>
+		<form on:submit|once|preventDefault={onSubmit}>
 			<div class="form-group">
 				<label for="username">Enter Vehicle Number</label>
 				<input
+					required
 					bind:value={vehicleNumber}
 					type="text"
 					class="form-control"

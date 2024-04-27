@@ -56,6 +56,9 @@
               <button type="submit" class="mt-3 btn btn-primary btn-block">Login</button>
             </form>
           </div>
+          <div class="mt-2 text-center">
+            <a class="btn btn-link" href="/login">Already have an account?</a>
+        </div>
         </div>
       </div>
     </div>
