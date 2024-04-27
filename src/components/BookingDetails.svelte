@@ -15,7 +15,9 @@
     {#if booking.balanceAmount}
     <p>Balance amount : $ {booking.balanceAmount}</p>
     {/if}
-    <p>Total Amount : $ {booking.totalAmount}</p>
+   {#if booking.totalAmount}
+   <p>Total Amount : $ {booking.totalAmount}</p>
+   {/if}
  </div>
 </div>
 {/if}
